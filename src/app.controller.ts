@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Param,
@@ -9,6 +10,7 @@ import {
 import { AppService } from './app.service';
 import { RepositoryGithub } from './shared/interfaces/repository-github.interface';
 import { Repository } from './shared/type/saved-repository.type';
+import { HttpStatusCode } from './shared/enum/http-status.enum';
 import { GetAllRepositoriesResponse } from './shared/interfaces/get-all-repositories-response.interface';
 import { GetInternalRepositoriesByUserNameResponse } from './shared/type/get-internal-repositories-by-username.type';
 import { GetAllInternalRepositoriesByNameResponse } from './shared/interfaces/get-all-internal-repositories-by-name-response.interface';
@@ -18,6 +20,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('/external/user/:userName')
+  @HttpCode(HttpStatusCode.CREATED)
   async getAllExternalRepositories(
     @Param('userName') userName: string,
   ): Promise<GetAllRepositoriesResponse> {
@@ -63,6 +66,7 @@ export class AppController {
   }
 
   @Get('/internal/user/:userName')
+  @HttpCode(HttpStatusCode.OK)
   async getAllInternalRepositories(
     @Param('userName') userName: string,
   ): Promise<GetInternalRepositoriesByUserNameResponse[]> {
@@ -87,6 +91,7 @@ export class AppController {
   }
 
   @Get('/internal/repo')
+  @HttpCode(HttpStatusCode.OK)
   async getAllInternalRepositoriesByRepoName(
     @Query('reposNames') query: string,
   ): Promise<GetAllInternalRepositoriesByNameResponse[]> {
