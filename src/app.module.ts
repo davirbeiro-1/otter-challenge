@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RepositoryModule } from './repository/repository.module';
@@ -8,6 +8,7 @@ import { RequesterModule } from './requester/requester.module';
 import { UserModule } from './user/user.module';
 import { AxiosProvider } from './axios/axios.provider';
 import { ConfigModule } from '@nestjs/config';
+import { LoggerMiddleware } from './middlewares/logger.middlewares';
 
 @Module({
   imports: [
@@ -23,4 +24,8 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [AppController],
   providers: [AppService, AxiosProvider],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes(AppController);
+  }
+}
