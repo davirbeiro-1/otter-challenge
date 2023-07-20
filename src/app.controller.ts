@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   HttpCode,
@@ -30,7 +31,10 @@ export class AppController {
         await this.appService.getAllExternalRepositories(userName),
       );
     } catch (error) {
-      throw error;
+      throw new BadRequestException('Something bad happened', {
+        cause: new Error(),
+        description: 'There are some problem with the system.',
+      });
     }
   }
 
@@ -75,7 +79,10 @@ export class AppController {
         await this.appService.getAllLocalRepositories(userName),
       );
     } catch (error) {
-      throw error;
+      throw new BadRequestException('Something bad happened', {
+        cause: new Error(),
+        description: 'There are some problem with the system.',
+      });
     }
   }
 
@@ -100,7 +107,10 @@ export class AppController {
         await this.appService.findAllRepoByName(query),
       );
     } catch (error) {
-      throw error;
+      throw new BadRequestException('Something bad happened', {
+        cause: new Error(),
+        description: 'There are some problem with the system.',
+      });
     }
   }
 
