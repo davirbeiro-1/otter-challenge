@@ -8,9 +8,9 @@ import { RepositoryGithub } from './shared/interfaces/repository-github.interfac
 @Injectable()
 export class AppService {
   constructor(
-    private externalRepoService: ExternalRepoService,
-    private userService: UserService,
-    private repositoryService: RepositoryService,
+    private readonly externalRepoService: ExternalRepoService,
+    private readonly userService: UserService,
+    private readonly repositoryService: RepositoryService,
   ) {}
 
   async getAllExternalRepositories(
