@@ -6,6 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Query,
 } from '@nestjs/common';
 import { AppService } from './app.service';
@@ -31,10 +32,7 @@ export class AppController {
         await this.appService.getAllExternalRepositories(userName),
       );
     } catch (error) {
-      throw new BadRequestException('Something bad happened', {
-        cause: new Error(),
-        description: 'There are some problem with the system.',
-      });
+      return error;
     }
   }
 
@@ -107,10 +105,7 @@ export class AppController {
         await this.appService.findAllRepoByName(query),
       );
     } catch (error) {
-      throw new BadRequestException('Something bad happened', {
-        cause: new Error(),
-        description: 'There are some problem with the system.',
-      });
+      throw error;
     }
   }
 
@@ -130,5 +125,17 @@ export class AppController {
         [repoName]: repoData !== null ? repoData : 'Repository doesnt exist',
       };
     });
+  }
+
+  @Get('/internal/repository/:id')
+  @HttpCode(HttpStatus.OK)
+  async getOneRepository(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Repository> {
+    try {
+      return await this.appService.getOneRepository(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }

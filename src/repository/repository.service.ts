@@ -7,7 +7,7 @@ export class RepositoryService {
 
   async createRepository(repositoryData) {
     try {
-      const repository = await this.getOneRepository(repositoryData.name);
+      const repository = await this.getOneRepositoryByName(repositoryData.name);
 
       if (repository) {
         return repositoryData.name;
@@ -27,9 +27,15 @@ export class RepositoryService {
     } catch (error) {}
   }
 
-  async getOneRepository(name: string) {
+  async getOneRepositoryByName(name: string) {
     return await this.databaseService.repository.findFirst({
       where: { name },
+    });
+  }
+
+  async getOneRepositoryByID(id: number) {
+    return await this.databaseService.repository.findFirst({
+      where: { id },
     });
   }
 
