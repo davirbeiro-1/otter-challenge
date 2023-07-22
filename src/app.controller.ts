@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -7,7 +8,9 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Post,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { RepositoryGithub } from './shared/interfaces/repository-github.interface';
@@ -15,6 +18,11 @@ import { Repository } from './shared/type/saved-repository.type';
 import { GetAllRepositoriesResponse } from './shared/interfaces/get-all-repositories-response.interface';
 import { GetInternalRepositoriesByUserNameResponse } from './shared/type/get-internal-repositories-by-username.type';
 import { GetAllInternalRepositoriesByNameResponse } from './shared/interfaces/get-all-internal-repositories-by-name-response.interface';
+import {
+  CreateRepositoryDTO,
+  createRepositorySchema,
+} from './repository/dto/create-repository.dto';
+import { JoiValidationPipe } from './validators/joi-schema-validator';
 
 @Controller('app')
 export class AppController {
@@ -134,6 +142,19 @@ export class AppController {
   ): Promise<Repository> {
     try {
       return await this.appService.getOneRepository(id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Post('/internal/repository/')
+  @HttpCode(HttpStatus.CREATED)
+  @UsePipes(new JoiValidationPipe(createRepositorySchema))
+  async createRepository(
+    @Body() createRepositoryDto: CreateRepositoryDTO,
+  ): Promise<Repository> {
+    try {
+      return await this.appService.createRepository(createRepositoryDto);
     } catch (error) {
       throw error;
     }

@@ -5,6 +5,7 @@ import { UserService } from './user/user.service';
 import { RepositoryService } from './repository/repository.service';
 import { RepositoryGithub } from './shared/interfaces/repository-github.interface';
 import { Repository } from './shared/type/saved-repository.type';
+import { CreateRepositoryDTO } from './repository/dto/create-repository.dto';
 
 @Injectable()
 export class AppService {
@@ -65,5 +66,11 @@ export class AppService {
 
   async getOneRepository(id: number): Promise<Repository> {
     return await this.repositoryService.getOneRepositoryByID(id);
+  }
+
+  async createRepository(
+    repositoryData: CreateRepositoryDTO,
+  ): Promise<Repository> {
+    return await this.repositoryService.createRepository(repositoryData);
   }
 }
